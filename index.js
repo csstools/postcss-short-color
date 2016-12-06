@@ -1,19 +1,52 @@
-var postcss = require('postcss');
+// tooling
+const postcss = require('postcss');
 
-module.exports = postcss.plugin('postcss-short-color', function (opts) {
-	var prefix = opts && opts.prefix ? '-' + opts.prefix + '-' : '';
-	var name   = 'color';
+// plugin
+module.exports = postcss.plugin('postcss-short-color', ({
+	prefix = '',
+	skip   = '*'
+}) => {
+	// dashed prefix
+	const dashedPrefix = prefix ? '-' + prefix + '-' : '';
 
-	return function (css) {
-		css.walkDecls(prefix + name, function (decl) {
-			if (prefix) decl.prop = name;
+	// property pattern
+	const propertyMatch = new RegExp(`^${ dashedPrefix }(color)$`);
 
-			var value = postcss.list.space(decl.value);
+	return (css) => {
+		// walk each matching declaration
+		css.walkDecls(propertyMatch, (decl) => {
+			// unprefixed property
+			const property = decl.prop.match(propertyMatch)[1];
 
-			if (value[0] === '*') decl.remove();
-			else decl.value = value[0];
+			// if a prefix is in use
+			if (prefix) {
+				// remove it from the property
+				decl.prop = property;
+			}
 
-			if (value[1] && value[1] !== '*') decl.cloneAfter({ prop: 'background-color', value: value.slice(1).join(' ') });
+			// space-separated values (color, background-color)
+			const values = postcss.list.space(decl.value);
+
+			// if there are multiple values
+			if (values.length > 1) {
+				// if the background-color value is not a skip token
+				if (values[1] !== skip) {
+					// create a new declaration for the background-color
+					decl.cloneAfter({
+						prop: 'background-color',
+						value: values.slice(1).join(' ')
+					});
+				}
+
+				// if the color value is a skip token
+				if (values[0] === skip) {
+					// remove the original color declaration
+					decl.remove();
+				} else {
+					// otherwise, update the color value
+					decl.value = values[0];
+				}
+			}
 		});
 	};
 });
