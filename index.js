@@ -4,10 +4,10 @@ const postcss = require('postcss');
 // plugin
 module.exports = postcss.plugin('postcss-short-color', ({
 	prefix = '',
-	skip   = '*'
-}) => {
+	skip = '*'
+} = {}) => {
 	// dashed prefix
-	const dashedPrefix = prefix ? '-' + prefix + '-' : '';
+	const dashedPrefix = prefix ? `-${ prefix }-` : '';
 
 	// property pattern
 	const propertyMatch = new RegExp(`^${ dashedPrefix }(color)$`);
@@ -50,3 +50,10 @@ module.exports = postcss.plugin('postcss-short-color', ({
 		});
 	};
 });
+
+// override plugin#process
+module.exports.process = function (cssString, pluginOptions, processOptions) {
+	return postcss([
+		0 in arguments ? module.exports(pluginOptions) : module.exports()
+	]).process(cssString, processOptions);
+};
