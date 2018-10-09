@@ -16,7 +16,9 @@ module.exports = {
 			message: 'supports prefix size with prefix',
 			options: {
 				prefix: 'x'
-			}
+			},
+			expect: 'basic.expect.css',
+			result: 'basic.result.css'
 		},
 		'skipped': {
 			message: 'supports skip tokens'
