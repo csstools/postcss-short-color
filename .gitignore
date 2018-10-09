@@ -1,2 +1,11 @@
-node_modules/
-npm-debug.log
+node_modules
+index.*.*
+package-lock.json
+*.log*
+*.result.css
+.*
+!.editorconfig
+!.gitignore
+!.rollup.js
+!.tape.js
+!.travis.yml

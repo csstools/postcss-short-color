@@ -1,4 +1,9 @@
-# Changes to Color Shorthand
+# Changes to PostCSS Short Color
+
+### 4.0.0 (October 9, 2018)
+
+- Updated: Supports Node 6+ (major)
+- Updated: PostCSS 7.0.5 (major)
 
 ### 3.0.0 (May 25, 2017)
 

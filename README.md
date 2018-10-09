@@ -1,134 +1,109 @@
-# Color Shorthand [<img src="https://postcss.github.io/postcss/logo.svg" alt="PostCSS Logo" width="90" height="90" align="right">][postcss]
+# PostCSS Short Color [<img src="https://postcss.github.io/postcss/logo.svg" alt="PostCSS" width="90" height="90" align="right">][postcss]
 
 [![NPM Version][npm-img]][npm-url]
 [![Build Status][cli-img]][cli-url]
-[![Windows Build Status][win-img]][win-url]
-[![Gitter Chat][git-img]][git-url]
+[![Support Chat][git-img]][git-url]
 
-[Color Shorthand] lets you define `background-color` within the `color` property in CSS.
+[PostCSS Short Color] lets you define `background-color` within the `color`
+property in CSS.
 
-```css
-/* before */
-
+```pcss
 header {
   color: #abccfc #212231;
 }
 
-/* after */
+/* becomes */
 
 header {
-  color: #abccfc;
   background-color: #212231;
+  color: #abccfc;
 }
 ```
 
-## Options
-
-#### `prefix`
-
-Type: `String`  
-Default: `""`
-
-Adds an optional prefix to the `color` property (e.g. `"x"` for `-x-color`). Wrapping dashes (`-`) are automatically applied.
-
-#### `skip`
-
-Type: `String`  
-Default: `"*"`
-
-Specifies the skip token used to ignore a length.
-
 ## Usage
 
-Add [Color Shorthand] to your build tool:
+Add [PostCSS Short Color] to your project:
 
 ```bash
 npm install postcss-short-color --save-dev
 ```
 
-#### Node
+Use [PostCSS Short Color] to process your CSS:
 
 ```js
-require('postcss-short-color').process(YOUR_CSS, { /* options */ });
+const postcssShortColor = require('postcss-short-color');
+
+postcssShortColor.process(YOUR_CSS /*, processOptions, pluginOptions */);
 ```
 
-#### PostCSS
-
-Add [PostCSS] to your build tool:
-
-```bash
-npm install postcss --save-dev
-```
-
-Load [Color Shorthand] as a PostCSS plugin:
+Or use it as a [PostCSS] plugin:
 
 ```js
+const postcss = require('postcss');
+const postcssShortColor = require('postcss-short-color');
+
 postcss([
-  require('postcss-short-color')({ /* options */ })
-]).process(YOUR_CSS, /* options */);
+  postcssShortColor(/* pluginOptions */)
+]).process(YOUR_CSS /*, processOptions */);
 ```
 
-#### Gulp
+[PostCSS Short Color] runs in all Node environments, with special instructions for:
 
-Add [Gulp PostCSS] to your build tool:
+| [Node](INSTALL.md#node) | [PostCSS CLI](INSTALL.md#postcss-cli) | [Webpack](INSTALL.md#webpack) | [Create React App](INSTALL.md#create-react-app) | [Gulp](INSTALL.md#gulp) | [Grunt](INSTALL.md#grunt) |
+| --- | --- | --- | --- | --- | --- |
 
-```bash
-npm install gulp-postcss --save-dev
-```
+## Options
 
-Enable [Color Shorthand] within your Gulpfile:
+#### prefix
+
+The `prefix` option defines a prefix required by properties being transformed.
+Wrapping dashes are automatically applied, so that `x` would transform
+`-x-color`.
 
 ```js
-var postcss = require('gulp-postcss');
-
-gulp.task('css', function () {
-  return gulp.src('./src/*.css').pipe(
-    postcss([
-      require('postcss-short-color')({ /* options */ })
-    ])
-  ).pipe(
-    gulp.dest('.')
-  );
-});
+postcssShortColor({ prefix: 'x' });
 ```
 
-#### Grunt
+```pcss
+header {
+  -x-color: #abccfc #212231;
+}
 
-Add [Grunt PostCSS] to your build tool:
+/* becomes */
 
-```bash
-npm install grunt-postcss --save-dev
+header {
+  background-color: #212231;
+  color: #abccfc;
+}
 ```
 
-Enable [Color Shorthand] within your Gruntfile:
+#### skip
+
+The `skip` option defines the skip token used to ignore portions of the
+shorthand.
 
 ```js
-grunt.loadNpmTasks('grunt-postcss');
-
-grunt.initConfig({
-  postcss: {
-    options: {
-      use: [
-        require('postcss-short-color')({ /* options */ })
-      ]
-    },
-    dist: {
-      src: '*.css'
-    }
-  }
-});
+postcssShortColor({ skip: '-' });
 ```
 
-[npm-url]: https://www.npmjs.com/package/postcss-short-color
-[npm-img]: https://img.shields.io/npm/v/postcss-short-color.svg
-[cli-url]: https://travis-ci.org/jonathantneal/postcss-short-color
+```pcss
+header {
+  color: - #212231;
+}
+
+/* becomes */
+
+header {
+  background-color: #212231;
+}
+```
+
 [cli-img]: https://img.shields.io/travis/jonathantneal/postcss-short-color.svg
-[win-url]: https://ci.appveyor.com/project/jonathantneal/postcss-short-color
-[win-img]: https://img.shields.io/appveyor/ci/jonathantneal/postcss-short-color.svg
+[cli-url]: https://travis-ci.org/jonathantneal/postcss-short-color
+[git-img]: https://img.shields.io/badge/support-chat-blue.svg
 [git-url]: https://gitter.im/postcss/postcss
-[  git-img]: https://img.shields.io/badge/chat-gitter-blue.svg
+[npm-img]: https://img.shields.io/npm/v/postcss-short-color.svg
+[npm-url]: https://www.npmjs.com/package/postcss-short-color
 
-[Color Shorthand]: https://github.com/jonathantneal/postcss-short-color
 [PostCSS]: https://github.com/postcss/postcss
-[Gulp PostCSS]: https://github.com/postcss/gulp-postcss
-[Grunt PostCSS]: https://github.com/nDmitry/grunt-postcss
+[PostCSS Short Color]: https://github.com/jonathantneal/postcss-short-color
